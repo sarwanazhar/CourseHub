@@ -67,7 +67,7 @@ export const enrollInCourse = async (req: Request, res: Response) => {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.CLIENT_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${process.env.CLIENT_URL}/payment/success/{CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}/payment/cancel`,
       metadata: {
         courseId,
@@ -120,4 +120,32 @@ export const getCourse = async (req: Request, res: Response) => {
   }
 
   res.status(200).json(courseData)
+}
+
+export const getVideo = async (req: Request, res: Response) => {
+  const { courseId, videoId } = req.params
+
+  console.log(courseId, videoId)
+
+  const video = await prisma.video.findUnique({
+    where: {
+      id: videoId,
+      AND: {
+        courseId: courseId
+      }
+    }
+  })
+
+  if (!video) {
+    res.status(404).json({ message: 'Video not found' })
+    return null
+  }
+
+  res.status(200).json({
+    video: {
+      id: video.id,
+      title: video.title,
+      videoUrl: video.videoUrl
+    }
+  })
 }

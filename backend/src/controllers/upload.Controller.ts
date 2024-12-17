@@ -120,6 +120,7 @@ export const uploadVideo = async (req: Request, res: Response) => {
   }
 };
 
+
 export const uploadVideoCompressing = async (req: Request, res: Response) => {
   if (!req.file) {
     res.status(400).json({ message: 'No video file uploaded' });
@@ -134,16 +135,10 @@ export const uploadVideoCompressing = async (req: Request, res: Response) => {
       compressedVideos: true,
     }
   });
-  
+
   console.log(user);
   console.log(user?.compressedVideos);
   console.log("compressing video");
-
-  // limit the user to 2 compressed videos if they are not a pro user
-  // if(user?.compressedVideos && user.compressedVideos.length >= 2 && user.role !== 'ADMIN' && !user.isPro) {
-  //   res.status(200).json({ message: 'You have reached the maximum limit of compressed videos if you want to upload more videos please upgrade to PRO membership' });
-  //   return;
-  // }
 
   if (!user) {
     res.status(404).json({ message: 'User not found' });
@@ -160,14 +155,15 @@ export const uploadVideoCompressing = async (req: Request, res: Response) => {
     fs.writeFileSync(tempFilePath, req.file.buffer);
     const outputFilePath = `${tempFilePath.split('.')[0]}_compressed.mp4`;
 
-    // Compress the video using ffmpeg
+    // Compress the video using ffmpeg with adjusted parameters for memory efficiency
     ffmpeg(tempFilePath)
-    .outputOptions([
-      '-preset medium', // Switch to a medium preset for better quality
-      '-vcodec libx264',
-      '-crf 20', // Lower CRF for less blur
-      '-b:v 2M', // Set a target bitrate
-      '-filter:v scale=-2:720' // Keep resolution at 720p
+      .outputOptions([
+        '-preset slower', // Slower preset for better compression but more time
+        '-vcodec libx264',
+        '-crf 28', // Higher CRF for more compression (lower quality)
+        '-b:v 1000k', // Lower bitrate for even more compression
+        '-filter:v scale=-2:480', // Lower resolution (480p) for memory savings
+        '-max_alloc 400000000' // Set max memory allocation to 400 MB
       ])
       .save(outputFilePath)
       .on('end', async () => {

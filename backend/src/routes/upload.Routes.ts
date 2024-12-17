@@ -4,7 +4,7 @@ import { uploadFile, uploadVideo, uploadVideoCompressing } from '../controllers/
 
 const router = express.Router();
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage, limits: { fileSize: 200 * 1024 * 1024 } });
+const upload = multer({ storage: storage, limits: { fileSize: 100 * 1024 * 1024 } });
 
 router.post('/image', upload.single('file'), uploadFile);
 
