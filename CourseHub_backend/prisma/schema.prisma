@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  imageUrl String
+  email    String @unique
+  role     Role @default(STUDENT)
+  courses  Course[] @relation("UserCourses")
+  enrollments Enrollment[] @relation("UserEnrollments")
+  compressedVideos CompressedVideo[]
+  accountBalance Int @default(0)
+  isPro Boolean @default(false)
+
+  createdAt DateTime @default(now())                          
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum CourseStatus {
+  PUBLISHED
+  INACTIVE
+}
+
+model Course {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  imageUrl String
+  publicId String
+  description String
+  userId String @db.ObjectId
+  user User @relation(fields: [userId], references: [id], name: "UserCourses")
+  videos      Video[]
+  enrollments Enrollment[] @relation("CourseEnrollments")
+  price Int
+  status CourseStatus @default(INACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Video {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  courseId String @db.ObjectId
+  title    String
+  course Course @relation(fields: [courseId], references: [id])
+  videoUrl String
+  videoDuration String
+  userId String @db.ObjectId
+  videoSize String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enrollment {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  courseId String @db.ObjectId
+  course Course @relation(fields: [courseId], references: [id], name: "CourseEnrollments")
+  user User @relation(fields: [userId], references: [id], name: "UserEnrollments")
+  courseName String
+  courseImageUrl String
+  courseDescription String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CompressedVideo {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  videoUrl String
+  videoDuration String
+  videoSize String
+  originalSize String
+  compressionRate String
+  date String
+
+  userId String @db.ObjectId
+  user User @relation(fields: [userId], references: [id])
+}

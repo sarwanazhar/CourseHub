@@ -8,6 +8,7 @@ import courseRoute from './routes/course.Routes';
 import bodyParser from 'body-parser';
 import enrolledRoute from './routes/enrolled.routes'
 import paymentRoute from './routes/payment.routes'
+
 dotenv.config();
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

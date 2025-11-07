@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { v2 as cloudinary } from 'cloudinary';
+import { deleteImage } from "../libs/deleteimage";
 
 const prisma = new PrismaClient();
 
@@ -60,7 +61,8 @@ export const createCourse = async (req: Request, res: Response) => {
       description,
       imageUrl,
       userId,
-      price: Number(price)
+      price: Number(price),
+      publicId
     }
   })
 
@@ -82,6 +84,7 @@ export const getAllCourses = async (req: Request, res: Response) => {
 export const getCourseById = async (req: Request, res: Response) => {
   const { id } = req.params;
   const {user_id} = req.query
+  console.log(id,user_id)
 
   if (!id || !user_id) {
     res.status(400).json({ message: 'Course ID is required' });
@@ -224,6 +227,8 @@ export const deleteCourse = async (req: Request, res: Response) => {
     return;
   }
 
+  deleteImage(course.publicId)
+
   const deletedCourse = await prisma.course.delete({
     where: {id}
   })
@@ -241,6 +246,18 @@ export const updateCourse = async (req: Request, res: Response) => {
     res.status(400).json({message: 'Title, description, userId, price, and file are required'})
     return;
   }
+
+  const course = await prisma.course.findUnique({
+    where: {
+      id
+    }
+  })
+  
+  if (!course) {
+    res.status(400).json({message: "the course does not exist in database with the given id"})
+  }
+
+  deleteImage(course?.publicId || "")
 
   let publicId = '';
   let imageUrl = '';
@@ -269,7 +286,8 @@ export const updateCourse = async (req: Request, res: Response) => {
     title,
     description,
     price: Number(price),
-    imageUrl
+    imageUrl,
+    publicId
   };
 
   const updatedCourse = await prisma.course.update({

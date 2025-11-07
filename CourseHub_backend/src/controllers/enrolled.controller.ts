@@ -21,7 +21,7 @@ export const getEnrolledCourses = async (req: Request, res: Response) => {
         userId: userId
       },
       include: {
-        course: true,
+        course: true
       }
     })
     const courses = {
@@ -67,8 +67,8 @@ export const enrollInCourse = async (req: Request, res: Response) => {
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.CLIENT_URL}/payment/success/{CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/payment/cancel`,
+      success_url: `${process.env.FRONTEND_URL}/payment/success/{CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment/cancel`,
       metadata: {
         courseId,
         userId,
