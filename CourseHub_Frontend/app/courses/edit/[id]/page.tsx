@@ -29,7 +29,12 @@ export default function EditCoursePage() {
   const [isSaving, setIsSaving] = useState(false)
   const router = useRouter()
   const params = useParams()
-  const {data: session} = useSession()
+  const {data: session, status} = useSession()
+
+    if (status === 'unauthenticated') {
+    router.push('/login')
+    return null // Prevent rendering anything else
+  }
 
 
 const fetchCourseData = async (courseId: string) => {
@@ -166,7 +171,7 @@ const fetchCourseData = async (courseId: string) => {
             />
           </div>
           <div className="flex justify-between">
-            <Button type="button" variant="outline" onClick={() => router.push('/courses/manage')}>
+            <Button type="button" variant="outline" onClick={() => router.back()}>
               Cancel
             </Button>
             <Button type="submit" disabled={isSaving}>

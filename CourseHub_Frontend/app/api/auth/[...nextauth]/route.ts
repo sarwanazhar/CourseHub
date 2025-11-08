@@ -54,6 +54,8 @@ const authOptions = {
       if (session.user) {
         session.user.email = dbUser?.email;
         session.user.id = dbUser?.id;
+        session.user.name = dbUser?.name;
+        session.user.image = dbUser?.imageUrl;
       }
       return session;
     }

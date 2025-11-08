@@ -64,6 +64,14 @@ function DashboardComponent() {
               <p className="text-gray-400 text-base font-normal">{session?.user?.email}</p>
             </div>
           </div>
+          <div className='mt-5 flex justify-center lg:justify-normal'>
+            <Button
+              onClick={() => router.push("/dashboard/edit")}
+              className="flex h-9 px-4 py-2 bg-gray-800 text-white text-sm font-medium hover:bg-gray-700 transition-colors w-fit rounded-md"
+            >
+              Edit Profile
+            </Button>
+          </div>
         </aside>
 
         {/* Main Content */}

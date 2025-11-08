@@ -12,6 +12,7 @@ model User {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   imageUrl String
+  imagePublicId String?
   email    String @unique
   role     Role @default(STUDENT)
   courses  Course[] @relation("UserCourses")
