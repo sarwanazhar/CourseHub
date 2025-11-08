@@ -27,13 +27,14 @@ function formatFileSize(bytes: number) {
 
 
 export default function CompressedVideosPage() {
-  const router = useRouter()
   const { data: session, status } = useSession()
   const [userData, setUserData] = useState<CompressedVideo[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
-  if(status === 'unauthenticated'){
-    return window.location.href = '/login'
+  if (status === 'unauthenticated') {
+    router.push('/login')
+    return null // Prevent rendering anything else
   }
 
   const handleDownload = (videoUrl: string) => {

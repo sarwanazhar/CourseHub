@@ -8,6 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import axios from 'axios'
 import { Loader2 } from 'lucide-react'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 interface Course {
   id: string
@@ -22,11 +23,13 @@ const CoursesComponent = () => {
   const [courses, setCourses] = useState<Course[] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { status } = useSession()
+  const router = useRouter()
 
-  if(status === 'unauthenticated'){
-    return window.location.href = '/login'
+  if (status === 'unauthenticated') {
+    router.push('/login')
+    return null // Prevent rendering anything else
   }
-
+  
   useEffect(() => {
     const fetchCourses = async () => {
       try {

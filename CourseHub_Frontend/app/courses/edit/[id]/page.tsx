@@ -166,7 +166,7 @@ const fetchCourseData = async (courseId: string) => {
             />
           </div>
           <div className="flex justify-between">
-            <Button type="button" variant="outline" onClick={() => router.push('/manage-courses')}>
+            <Button type="button" variant="outline" onClick={() => router.push('/courses/manage')}>
               Cancel
             </Button>
             <Button type="submit" disabled={isSaving}>
