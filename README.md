@@ -27,6 +27,21 @@ CourseHub is a full-stack online learning platform that enables instructors to c
 - 🗜️ **Video Compression**: Built-in video compression to reduce file sizes
 - ☁️ **Cloud Storage**: Cloudinary integration for media storage
 
+---
+
+## 🛠️ Technical Note: Media Processing & Resource Management
+
+> [!IMPORTANT]  
+> **Note on Video Compression & Production Environment**
+>
+> This project implements a sophisticated **FFmpeg pipeline** designed to compress video uploads before they reach the cloud. This ensures optimal storage usage on Cloudinary and faster streaming for users.
+>
+> * **The Implementation:** The backend includes logic to process video buffers through FFmpeg, reducing file sizes significantly while maintaining visual fidelity.
+> * **Environment Constraints:** While the code is fully functional and tested in local development, the **Render Free Tier** used for the live demo has a 512MB RAM limit. Heavy video encoding is a CPU/RAM-intensive process that exceeds these hardware limits, causing the free-tier server to restart.
+> * **Engineering Insight:** To maintain 100% uptime for the live demo, the heavy compression task is limited in production. However, the source code demonstrates a production-ready media pipeline that would scale seamlessly on a dedicated VPS or AWS EC2 instance.
+
+---
+
 ## 🛠️ Tech Stack
 
 ### 🔙 Backend (Node.js/TypeScript)
