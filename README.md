@@ -480,6 +480,7 @@ NEXTAUTH_URL=http://localhost:3000
 # Google OAuth
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
+API_URL=your_backend_url
 
 # Database (for Prisma)
 DATABASE_URL="mongodb://localhost:27017/coursehub"
