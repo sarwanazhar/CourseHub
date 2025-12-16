@@ -17,6 +17,7 @@
 ## 🎯 Overview
 
 CourseHub is a full-stack online learning platform that enables instructors to create and sell courses, and students to enroll and learn. The platform includes features like video uploads, payment processing, course management, and video compression capabilities.
+Course Hub Built earlier in my learning journey; later projects improve backend security and auth models.
 
 ### ✨ Key Features
 - 🔐 **User Authentication**: Google OAuth integration
